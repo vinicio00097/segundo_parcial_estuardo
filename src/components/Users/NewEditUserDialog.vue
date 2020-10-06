@@ -124,10 +124,11 @@ export default {
                         newUserFormat
                     ).then((response)=>{
                         if(response.data.code==23){
-                            this.$emit('onclose');
                             this.$emit('onsuccess')
                             this.$refs.newUser.reset();
                         }
+
+                        this.$emit('onclose',response.data.code,response.data.message);
                     }).catch((error)=>{
                         console.log(error);
                     });
@@ -139,10 +140,11 @@ export default {
                         newUserFormat
                     ).then((response)=>{
                         if(response.data.code==24){
-                            this.$emit('onclose');
                             this.$emit('onsuccess')
                             this.$refs.newUser.reset();
                         }
+
+                        this.$emit('onclose',response.data.code,response.data.message);
                     }).catch((error)=>{
                         console.log(error);
                     });
@@ -151,6 +153,13 @@ export default {
                 this.savingUser=false;
             }
         },
+        showNotification(color,text){
+            this.notificationSnackbar.state=false;
+            this.notificationSnackbar.color=color;
+            this.notificationSnackbar.text=text;
+            
+            this.notificationSnackbar.state=true;
+        }
     },
     data:()=>({
         savingUser:false,

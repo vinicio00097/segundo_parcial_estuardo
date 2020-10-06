@@ -27,6 +27,13 @@
                 </v-icon>
             </v-btn>
         </v-row>
+        <v-snackbar 
+            v-model="notificationSnackbar.state"
+            :color="notificationSnackbar.color"
+            :timeout="notificationSnackbar.timeout"
+            >
+            {{notificationSnackbar.text}}
+        </v-snackbar>
     </div>
 </template>
 <script>
@@ -36,7 +43,7 @@ import NewEditUserDialog from './NewEditUserDialog'
 export default {
     components:{
         AppBar,
-        NewEditUserDialog
+        NewEditUserDialog,
     },
     data:()=>({
         usersData:[],
@@ -44,7 +51,13 @@ export default {
         loaded:false,
         newUserDialog:false,
         action:"",
-        selectedUsuario:""
+        selectedUsuario:"",
+        notificationSnackbar:{
+            state:false,
+            text:"",
+            color:"",
+            timeout:3000
+        }
     }),
     methods:{
         onEdit(usuario){
@@ -52,7 +65,25 @@ export default {
             this.newUserDialog=true;
             this.selectedUsuario=usuario
         },
-        onclose(){
+        onclose(responseCode,message){
+            switch(responseCode){
+                case 23:
+                    this.showNotification("green",message);
+                break;
+                case 24:
+                    this.showNotification("green",message);
+                break;
+                case 28:
+                    this.showNotification("red",message);
+                break;
+                case 29:
+                    this.showNotification("red",message);
+                break;
+                case 30:
+                    this.showNotification("red",message);
+                break;
+            }
+
             this.newUserDialog=false;
         },
         loadUsers(){
@@ -79,11 +110,22 @@ export default {
             await this.$axios.delete(this.$webserviceBaseURL+`/Users/Delete/${id}`).then((response)=>{
                 if(response.data.code==22){
                     this.loadAllData();
+
+                    this.showNotification("green",response.data.message);
+                }else{
+                    this.showNotification("red",response.data.message);
                 }
             }).catch((error)=>{
                 console.log(error);
             });
         },
+        showNotification(color,text){
+            this.notificationSnackbar.state=false;
+            this.notificationSnackbar.color=color;
+            this.notificationSnackbar.text=text;
+            
+            this.notificationSnackbar.state=true;
+        }
     },
     created(){
         this.loadAllData();

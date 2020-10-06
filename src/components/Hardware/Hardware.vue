@@ -9,6 +9,16 @@
                         {{hardwareItem.descripcion}}
                     </v-card-title>
                     <v-card-subtitle>{{hardwareItem.marca}} - No. serie {{hardwareItem.numeroDeSerie}}</v-card-subtitle>
+                    <v-card-text>
+                        <v-row class="pa-0 ma-0">
+                            <v-col class="pa-0">
+                                Stock:
+                            </v-col>
+                            <v-col class="pa-0">
+                                <v-chip>{{hardwareItem.cantidadPiezas}}</v-chip>
+                            </v-col>
+                        </v-row>
+                    </v-card-text>
                 </v-card>
             </v-col>
         </v-row>
